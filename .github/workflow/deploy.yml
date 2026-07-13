@@ -1,0 +1,26 @@
+name: CI/CD Pipeline - AWS Deployment
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Step 1 - Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Step 2 - Deploy to AWS EC2
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USER }}
+          key: ${{ secrets.EC2_KEY }}
+          script: |
+            cd /var/www/html
+            sudo rm -rf *
+            sudo git clone https://github.com/Anandhi-awsdevops/cicd-aws-deployment.git .
+            echo "Deployment Successful!"
